@@ -32,8 +32,3 @@ variable "index_name" {
   type        = string
   default     = "application-logs"
 }
-
-variable "lambda_role_arn" {
-  description = "IAM role ARN for the log-indexer-lambda function"
-  type        = string
-}

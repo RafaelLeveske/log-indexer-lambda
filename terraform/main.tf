@@ -47,15 +47,15 @@ resource "aws_opensearch_domain" "log_observability" {
   }
 
   node_to_node_encryption {
-    enabled = false
+    enabled = true
   }
 
   encrypt_at_rest {
-    enabled = false
+    enabled = true
   }
 
   domain_endpoint_options {
-    enforce_https = false
+    enforce_https = true
   }
 }
 
@@ -92,7 +92,7 @@ resource "null_resource" "map_iam_role_to_opensearch" {
         -u ${var.master_user}:${data.aws_ssm_parameter.opensearch_password.value} \
         -H "Content-Type: application/json" \
         -d '{
-          "backend_roles": ["${var.lambda_role_arn}"],
+          "backend_roles": ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/log-indexer-lambda-dev-us-east-1-lambdaRole"],
           "hosts": [],
           "users": []
         }' \
