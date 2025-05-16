@@ -1,0 +1,48 @@
+service: log-indexer-lambda
+frameworkVersion: '4'
+
+provider:
+  name: aws
+  runtime: nodejs22.x
+  region: us-east-1
+
+  environment:
+    # ⚠️ ESSAS VARIÁVEIS VIRÃO DO TERRAFORM
+    OPENSEARCH_ENDPOINT: ${env:OPENSEARCH_ENDPOINT}
+    OPENSEARCH_INDEX: ${env:OPENSEARCH_INDEX}
+
+functions:
+  indexLogs:
+    handler: dist/handler.indexLogs
+    timeout: 10
+
+custom:
+  esbuild:
+    bundle: true
+    minify: false
+    sourcemap: true
+    exclude: ['aws-sdk']
+    target: node22
+    platform: node
+    concurrency: 10
+
+resources:
+  Resources:
+    LogGroupSubscriptionFilter:
+      Type: AWS::Logs::SubscriptionFilter
+      Properties:
+        LogGroupName: /aws/lambda/log-generator-lambda-dev-generateLogs
+        FilterPattern: ''
+        DestinationArn:
+          Fn::GetAtt:
+            - IndexLogsLambdaFunction
+            - Arn
+
+    AllowCWLogsToInvokeIndexer:
+      Type: AWS::Lambda::Permission
+      Properties:
+        FunctionName:
+          Ref: IndexLogsLambdaFunction
+        Action: lambda:InvokeFunction
+        Principal: logs.amazonaws.com
+        SourceArn: arn:aws:logs:us-east-1:805953723911:log-group:/aws/lambda/log-generator-lambda-dev-generateLogs:*

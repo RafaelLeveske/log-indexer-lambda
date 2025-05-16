@@ -1,0 +1,27 @@
+{
+  "name": "log-indexer-lambda",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "offline": "serverless offline start",
+    "build": "tsc -p tsconfig.build.json",
+    "deploy": "npm run build && npx serverless deploy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@aws-sdk/client-opensearch": "^3.810.0",
+    "@aws-sdk/client-opensearchserverless": "^3.810.0",
+    "@aws-sdk/credential-provider-node": "^3.810.0",
+    "@opensearch-project/opensearch": "^3.5.1",
+    "aws4fetch": "^1.0.20"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.149",
+    "@types/node": "^22.15.18",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
