@@ -60,12 +60,18 @@ resource "aws_opensearch_domain" "log_observability" {
 }
 
 resource "null_resource" "create_opensearch_role" {
+  triggers = {
+    always_run = timestamp()
+  }
+
   provisioner "local-exec" {
     command = <<EOT
-      curl -X PUT \
+      echo "🔐 Criando role lambda-writer-role no OpenSearch..."
+      curl -X POST \
         -u ${var.master_user}:${data.aws_ssm_parameter.opensearch_password.value} \
         -H "Content-Type: application/json" \
         -d '{
+          "description": "Lambda writer role",
           "cluster_permissions": [],
           "index_permissions": [
             {
@@ -73,19 +79,25 @@ resource "null_resource" "create_opensearch_role" {
               "allowed_actions": [
                 "indices:data/write/index",
                 "indices:data/write/bulk",
-                "indices:data/write/doc"
+                "indices:data/write/doc",
+                "indices:admin/create"
               ]
             }
           ],
-          "description": "Lambda writer role"
+          "tenant_permissions": []
         }' \
         https://${aws_opensearch_domain.log_observability.endpoint}/_plugins/_security/api/roles/lambda-writer-role
     EOT
   }
+
   depends_on = [aws_opensearch_domain.log_observability]
 }
 
 resource "null_resource" "map_iam_role_to_opensearch" {
+  triggers = {
+    always_run = timestamp()
+  }
+
   provisioner "local-exec" {
     command = <<EOT
       curl -X PUT \
@@ -99,5 +111,6 @@ resource "null_resource" "map_iam_role_to_opensearch" {
         https://${aws_opensearch_domain.log_observability.endpoint}/_plugins/_security/api/rolesmapping/lambda-writer-role
     EOT
   }
+
   depends_on = [null_resource.create_opensearch_role]
 }

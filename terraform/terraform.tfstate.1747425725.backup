@@ -1,7 +1,7 @@
 {
   "version": 4,
   "terraform_version": "1.11.4",
-  "serial": 28,
+  "serial": 12,
   "lineage": "425fe571-d7d2-63ef-fc37-7beb36e49596",
   "outputs": {
     "opensearch_dashboard_url": {
@@ -236,38 +236,15 @@
     {
       "mode": "managed",
       "type": "null_resource",
-      "name": "create_opensearch_role",
-      "provider": "provider[\"registry.terraform.io/hashicorp/null\"]",
-      "instances": [
-        {
-          "schema_version": 0,
-          "attributes": {
-            "id": "3275189861469800111",
-            "triggers": {
-              "always_run": "2025-05-16T20:12:18Z"
-            }
-          },
-          "sensitive_attributes": [],
-          "dependencies": [
-            "aws_opensearch_domain.log_observability",
-            "data.aws_caller_identity.current",
-            "data.aws_ssm_parameter.opensearch_password"
-          ]
-        }
-      ]
-    },
-    {
-      "mode": "managed",
-      "type": "null_resource",
       "name": "map_iam_role_to_opensearch",
       "provider": "provider[\"registry.terraform.io/hashicorp/null\"]",
       "instances": [
         {
           "schema_version": 0,
           "attributes": {
-            "id": "5044353142099163336",
+            "id": "3168743148328648985",
             "triggers": {
-              "always_run": "2025-05-16T20:12:19Z"
+              "always_run": "2025-05-16T19:49:47Z"
             }
           },
           "sensitive_attributes": [],

@@ -5,7 +5,7 @@
   "scripts": {
     "offline": "serverless offline start",
     "build": "tsc -p tsconfig.build.json",
-    "deploy": "npm run build && npx serverless deploy"
+    "deploy": "./deploy.sh"
   },
   "keywords": [],
   "author": "",
