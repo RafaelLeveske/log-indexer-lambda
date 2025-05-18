@@ -7,14 +7,15 @@ let client: Client;
 
 export const indexLogs = async (event: CloudWatchLogsEvent) => {
   if (!client) {
-    const signer = await awsGetSigV4Signer({
+    const { Connection, Transport } = await awsGetSigV4Signer({
       region: process.env.AWS_REGION || 'us-east-1',
       service: 'es',
     });
 
     client = new Client({
-      ...signer,
-      node: process.env.OPENSEARCH_ENDPOINT,
+      node: process.env.OPENSEARCH_ENDPOINT!,
+      Connection,
+      Transport, // ✅ adiciona isso explicitamente
     });
   }
 
@@ -32,16 +33,17 @@ export const indexLogs = async (event: CloudWatchLogsEvent) => {
       logStream: parsed.logStream,
     };
 
-    try {
-      await client.index({
-        index: process.env.OPENSEARCH_INDEX || 'application-logs',
-        body,
-      });
-      console.log('Log indexado com sucesso');
-    } catch (err) {
-      console.error('Erro ao indexar log:', err);
-    }
+  try {
+    await client.transport.request({
+      method: 'POST',
+      path: `/${process.env.OPENSEARCH_INDEX || 'application-logs'}/_doc`,
+      body,
+    });
+    console.log('✅ Log indexado com sucesso');
+  } catch (err) {
+    console.error('❌ Erro ao indexar log:', err);
   }
+}
 
   return { statusCode: 200, body: 'OK' };
 };

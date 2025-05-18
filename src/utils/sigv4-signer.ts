@@ -1,5 +1,5 @@
 import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
-import { defaultProvider } from "@aws-sdk/credential-provider-node";
+import { defaultProvider } from '@aws-sdk/credential-provider-node';
 
 export const awsGetSigV4Signer = async ({
   region,
@@ -9,6 +9,7 @@ export const awsGetSigV4Signer = async ({
   service: 'es' | 'aoss';
 }) => {
   const getCredentials = defaultProvider();
+
   const signer = AwsSigv4Signer({
     region,
     service,
@@ -17,5 +18,6 @@ export const awsGetSigV4Signer = async ({
 
   return {
     Connection: signer.Connection,
+    Transport: signer.Transport, // 🟢 essencial para assinar as requisições
   };
 };

@@ -66,8 +66,8 @@ resource "null_resource" "create_opensearch_role" {
 
   provisioner "local-exec" {
     command = <<EOT
-      echo "🔐 Criando role lambda-writer-role no OpenSearch..."
-      curl -X POST \
+      echo "🔐 Criando ou atualizando role lambda-writer-role..."
+      curl -X PUT \
         -u ${var.master_user}:${data.aws_ssm_parameter.opensearch_password.value} \
         -H "Content-Type: application/json" \
         -d '{
@@ -100,13 +100,12 @@ resource "null_resource" "map_iam_role_to_opensearch" {
 
   provisioner "local-exec" {
     command = <<EOT
+      echo "🔁 Mapeando IAM role para lambda-writer-role..."
       curl -X PUT \
         -u ${var.master_user}:${data.aws_ssm_parameter.opensearch_password.value} \
         -H "Content-Type: application/json" \
         -d '{
-          "backend_roles": ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/log-indexer-lambda-dev-us-east-1-lambdaRole"],
-          "hosts": [],
-          "users": []
+          "backend_roles": ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/log-indexer-lambda-dev-us-east-1-lambdaRole"]
         }' \
         https://${aws_opensearch_domain.log_observability.endpoint}/_plugins/_security/api/rolesmapping/lambda-writer-role
     EOT
