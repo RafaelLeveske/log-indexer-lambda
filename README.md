@@ -20,6 +20,8 @@ Lambda function responsible for consuming logs from **CloudWatch Logs** and inde
 
 This project listens to logs coming from the `log-generator-lambda` function via **CloudWatch Logs**, and indexes them into **OpenSearch** using IAM-based authentication. The function uses **SigV4 signing** with specific roles and secure communication with the OpenSearch domain provisioned via **Terraform**.
 
+The **Serverless Framework** is used to manage and provision the Lambda function and its associated AWS resources (like IAM roles, permissions, and log groups) in a declarative and scalable way.
+
 ---
 
 ## 🧱 Project Structure
@@ -67,21 +69,18 @@ aws ssm put-parameter \
 
 ## 📦 Deployment
 
-**1. Deploy infrastructure (Terraform):**
+The entire deployment process is automated via a single command:
 
 ```bash
-cd terraform
-terraform init
-terraform apply -auto-approve
-```
-
-**2. Deploy Lambda function:**
-
-```bash
-npm install
-npm run build
 npm run deploy
 ```
+
+This command performs:
+
+- The deployment of all infrastructure using **Terraform**
+- The provisioning and deployment of the Lambda function using the **Serverless Framework**
+
+Make sure the AWS CLI is authenticated and the environment is properly set up before running.
 
 ---
 
@@ -129,5 +128,7 @@ https://<your-endpoint>/_dashboards
 - Use of **SigV4 signing** with mapped roles
 - Real-world troubleshooting with **403 errors** and **FGAC**
 - Fully automated infrastructure using **Terraform**
+- Declarative and maintainable function setup with **Serverless Framework**
+- Unified deploy flow with a single command for IaC and Lambda
 
 ---
