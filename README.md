@@ -18,7 +18,7 @@ Lambda function responsible for consuming logs from **CloudWatch Logs** and inde
 
 ## 📌 What does this project do?
 
-This project listens to logs coming from the `log-generator-lambda` function via **CloudWatch Logs**, and indexes them into **OpenSearch** using IAM-based authentication. The function uses **SigV4 signing** with specific roles and secure communication with the OpenSearch domain provisioned via **Terraform**.
+This project listens to logs coming from the [`log-generator-lambda`](https://github.com/RafaelLeveske/log-generator-lambda) function via **CloudWatch Logs**, and indexes them into **OpenSearch** using IAM-based authentication. The function uses **SigV4 signing** with specific roles and secure communication with the OpenSearch domain provisioned via **Terraform**.
 
 The **Serverless Framework** is used to manage and provision the Lambda function and its associated AWS resources (like IAM roles, permissions, and log groups) in a declarative and scalable way.
 
@@ -86,7 +86,7 @@ Make sure the AWS CLI is authenticated and the environment is properly set up be
 
 ## 🔁 Testing the flow
 
-Trigger log generation using the `log-generator-lambda` function:
+Trigger log generation using the [`log-generator-lambda`](https://github.com/RafaelLeveske/log-generator-lambda) function:
 
 ```bash
 aws lambda invoke \
