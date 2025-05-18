@@ -1,4 +1,4 @@
-# 🪵 Log Indexer Lambda
+# 🔁 Log Indexer Lambda
 
 Lambda function responsible for consuming logs from **CloudWatch Logs** and indexing them into **OpenSearch** using IAM authentication (SigV4).
 
